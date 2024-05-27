@@ -21,6 +21,7 @@ namespace StudentTracking.Data.EntityFramework
         public DbSet<GameParticipationType> GameParticipationTypes { get; set; }
         public DbSet<GameTransaction> GameTransactions { get; set; }
         public DbSet<Cities> Cities { get; set; }
+        public DbSet<UserType> UserTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,9 @@ namespace StudentTracking.Data.EntityFramework
 
             modelBuilder.Entity<Cities>().HasKey(p => p.CityID);
             modelBuilder.Entity<Cities>().Property(p => p.Priority).HasDefaultValue(0);
+
+            modelBuilder.Entity<UserType>().HasKey(p => p.Id);
+
         }
 
 
