@@ -1,0 +1,51 @@
+﻿@model StudentTracking.Data.EntityFramework.Entities.GameforListPage;
+
+@{
+    ViewData["Title"] = "GameList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+<section class="main-content-w3layouts-agileits">
+    <div class="container">
+        <h3 class="tittle">Oyunlar</h3>
+        <div class="inner-sec">
+            <!--left-->
+            <div class="left-blog-info-w3layouts-agileits text-left">
+                <div class="row">
+
+                    @foreach (var item in Model.Games)
+                    {
+                        <div class="col-lg-4 card my-lg-4 my-md-1 my-0">
+                            @*
+                        Hem CustomerID değerini hemde GameID değerini döndürmeyi sağlıyor.
+                        <a href="/Customer/ParticipateGame?GameID=@item.GameID&CustomerID=@item.CustomerID">
+                        *@
+                            <a href="/Customer/ParticipateGame?gameID=@item.GameID">
+                                <img src="@item.Image" class="card-img-top img-fluid" alt="">
+                            </a>
+                            <div class="card-body">
+                                <ul class="blog-icons my-4">
+                                    <li>
+                                        <i class="far fa-calendar-alt"></i> @(((DateTime)item.StartDate).ToString("dd-MMM-yyyy"))
+                                    </li>
+                                    <li>
+                                        @*TODO Oynanan işlem sayısını çekip buraya at.*@
+                                        <i class="fas fa-eye"></i> @item.Status
+                                    </li>
+
+                                </ul>
+                                <h5 class="card-title">
+                                    @item.Name
+                                </h5>
+                                <p class="card-text mb-3">@item.Description</p>
+                                @*<p class="card-text mb-3">@item.Description.Substring(0,item.Description.Substring(0,100).LastIndexOf(" ")) </p>*@
+                                <a href="/Customer/ParticipateGame?gameID=@item.GameID" class="btn btn-primary read-m">Oyna</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

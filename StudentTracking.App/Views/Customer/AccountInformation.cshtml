@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "AccountInformation";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+@model StudentTracking.Data.EntityFramework.Entities.Customer;
+@using System;
+@using System.Linq;
+
+
+
+<title>Hesap Bilgisi</title>
+<section class="main-content-w3layouts-agileits">
+    <div class="container">
+        <h3 class="tittle">Hesap Bilgisi</h3>
+        <div class="inner-sec">
+            <div class="login p-5 bg-light mx-auto mw-100">
+                @using (Html.BeginForm("AccountInformation", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="validationCustom01">Adınız</label>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="validationCustom02">Soyadınız</label>
+                            @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputPassword1 mb-2">Şifreniz</label>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" ,type = "password", id = "password1"} })
+                            @Html.ValidationMessageFor(p=>p.Password,"", new {@class ="text-danger"})
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputPassword2 mb-2">Şifreniz (tekrar)</label>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" ,type = "password", id = "password2"} })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit mb-4">Bilgilerimi Güncelle</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('form').submit(function (e) {
+            e.preventDefault();
+
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+
+            if (password1 !== password2) {
+                swal({
+                    title: "Şifreler aynı değil!",
+                    text: "Girdiğiniz şifrelerin aynı olması gerekmektedir.",
+                    icon: "warning",
+                    button: "Tamam",
+                });
+                $('#password1').val('');
+                $('#password2').val('');
+                return;
+            }
+
+
+            $.ajax({
+                url: '@Url.Action("AccountInformation", "Customer")',
+                type: 'POST',
+                data: $('form').serialize(),
+                success: function (response) {
+                    if (response) {
+
+                        swal({
+                            title: "Başarılı!",
+                            text: "Hesap bilgileriniz güncellendi.",
+                            icon: "success",
+                            button: "Tamam",
+                        }).then(function () {
+                            location.reload();
+                        });
+                    } else {
+                        swal({
+                            title: "Hata!",
+                            text: "Hesap bilgileri güncellenirken bir hata oluştu.",
+                            icon: "error",
+                            button: "Tamam",
+                        });
+                    }
+                },
+                error: function () {
+                    swal({
+                        title: "Hata!",
+                        text: "Sunucu tarafında bir hata oluştu.",
+                        icon: "error",
+                        button: "Tamam",
+                    });
+                }
+            });
+        });
+    });
+</script>

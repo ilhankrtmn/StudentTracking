@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+@model CustomerRegisterBody;
+@using System;
+@using System.Linq;
+
+
+<title>Kayıt Ol</title>
+<section class="main-content-w3layouts-agileits">
+    <div class="container">
+        <h3 class="tittle">Kayıt Ol</h3>
+        <div class="inner-sec">
+            <div class="login p-5 bg-light mx-auto mw-100">
+                @using (Html.BeginForm("Register", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="validationCustom01">Adınız</label>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="validationCustom02">Soyadınız</label>
+                            @Html.EditorFor(model => model.Surname, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputPassword1 mb-2">E-Posta Adresiniz</label>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "email" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputPassword2 mb-2">Şehir Bilginiz</label>
+                            @Html.DropDownListFor(model => model.CityID, new SelectList(Model.CityList , "Value", "Text", 0), "Please Select a City", new { @class = "form-control", required = "required" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputPassword1 mb-2">Şifreniz</label>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" ,type = "password", id = "password1"} })
+                            @Html.ValidationMessageFor(p=>p.Password,"", new {@class ="text-danger"})
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputPassword2 mb-2">Şifreniz (tekrar)</label>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" ,type = "password", id = "password2"} })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit mb-4">Kayıt ol</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    $(document).ready(function () {
+        $('form').submit(function (e) {
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+
+            if (password1 !== password2) {
+                swal({
+                    title: "Şifreler aynı değil!",
+                    text: "Girdiğiniz şifrelerin aynı olması gerekmektedir.",
+                    icon: "warning",
+                    button: "Tamam",
+                });
+                e.preventDefault();
+            }
+            $('#password2').val('');
+        });
+    });
+</script>
+
