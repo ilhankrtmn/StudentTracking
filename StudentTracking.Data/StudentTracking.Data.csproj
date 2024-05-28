@@ -14,4 +14,9 @@
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

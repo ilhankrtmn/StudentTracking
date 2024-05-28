@@ -5,19 +5,15 @@ using StudentTracking.Data.EntityFramework.Repositories;
 using StudentTracking.Data.EntityFramework;
 using StudentTracking.Data.EntityFramework.UnitOfWork;
 using StudentTracking.Business.Configuraions;
+using ELECTRACORE.Business.Utilities.Api.Extensions;
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-
+    var services = builder.Services;
     builder.Services.AddControllersWithViews();
-    builder.Services.AddScoped<IGameService, GameService>();
-    builder.Services.AddScoped<IRegisterService, RegisterService>();
-    builder.Services.AddScoped<IEmailService, EmailService>();
-    builder.Services.AddScoped<ICheckWordService, CheckWordService>();
-    builder.Services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
-    builder.Services.AddScoped<IGameRepository, GameRepository>();
-    builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+    services.AddDIServices();
+
     builder.Services.AddDbContext<StudentTrackingContext>();
     builder.Services.AddSession();
 
@@ -44,7 +40,7 @@ try
 
     app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Customer}/{action=GameList}");
+        pattern: "{controller=Authentication}/{action=Register}");
 
     app.Run();
 

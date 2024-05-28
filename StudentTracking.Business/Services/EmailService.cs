@@ -7,8 +7,8 @@ using StudentTracking.Business.Configuraions;
 
 namespace StudentTracking.Business.Services
 {
-	public class EmailService : IEmailService
-	{
+	public class EmailService : IEmailService, IScopedService
+    {
 		private readonly EmailConfiguration _emailConfiguration;
 		public EmailService(EmailConfiguration emailConfiguration)
 		{
