@@ -1,23 +1,19 @@
-using StudentTracking.Business.Interfaces;
-using StudentTracking.Business.Services;
-using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
-using StudentTracking.Data.EntityFramework.Repositories;
 using StudentTracking.Data.EntityFramework;
-using StudentTracking.Data.EntityFramework.UnitOfWork;
 using StudentTracking.Business.Configuraions;
 using ELECTRACORE.Business.Utilities.Api.Extensions;
+using StudentTracking.Core.Session;
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
     var services = builder.Services;
+    services.AddHttpContextAccessor();
+
     builder.Services.AddControllersWithViews();
     services.AddDIServices();
 
     builder.Services.AddDbContext<StudentTrackingContext>();
     builder.Services.AddSession();
-
-
 
     var emailConfig = builder.Configuration
             .GetSection("EmailConfiguration")
@@ -31,6 +27,8 @@ try
         app.UseHsts();
     }
 
+    AppHttpContext.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
+
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseSession();
@@ -40,7 +38,7 @@ try
 
     app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Authentication}/{action=Register}");
+        pattern: "{controller=Authentication}/{action=Login}");
 
     app.Run();
 

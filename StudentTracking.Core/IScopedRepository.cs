@@ -1,4 +1,4 @@
-﻿namespace StudentTracking.Data.EntityFramework.Base
+﻿namespace StudentTracking.Core
 {
     public interface IScopedRepository
     {

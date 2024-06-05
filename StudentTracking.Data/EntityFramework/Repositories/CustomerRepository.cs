@@ -2,6 +2,7 @@
 using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using StudentTracking.Core;
 
 namespace StudentTracking.Data.EntityFramework.Repositories
 {

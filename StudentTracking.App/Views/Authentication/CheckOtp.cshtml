@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "CheckOtp";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+@model StudentTracking.Data.Models.CheckOtpRequestDto;
+@using System;
+@using System.Linq;
+
+<section class="main-content-w3layouts-agileits">
+    <div class="container">
+        <h3 class="tittle">Giriş Yap</h3>
+        <div class="row inner-sec">
+            <div class="login p-5 bg-light mx-auto mw-100">
+                @using (Html.BeginForm("CheckOtp", "Authentication", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    <div class="form-group">
+                        <label for="exampleInputEmail1 mb-2">Otp Mesajı</label>
+                        @Html.EditorFor(model => model.Pincode, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                    </div>
+                    <button type="submit" class="btn btn-primary submit mb-4">Kodu Doğrula</button>
+                }
+            </div>
+        </div>
+    </div>
+</section> 

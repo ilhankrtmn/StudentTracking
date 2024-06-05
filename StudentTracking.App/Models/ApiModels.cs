@@ -2,13 +2,13 @@
 
 namespace StudentTracking.App.Models
 {
-    public class CustomerLoginBody
+    public class UserLoginBody
     {
         public string Email { get; set; }
         public string Password { get; set; }
     }
 
-    public class CustomerRegisterBody
+    public class UserRegisterBody
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -16,13 +16,5 @@ namespace StudentTracking.App.Models
         public int CityID { get; set; }
         public string Password { get; set; }
         public IEnumerable<SelectListItem> CityList { get; set; }
-    }
-
-    public class ParticipateGameBody
-    {
-        public int ID { get; set; }
-        public int CustomerID { get; set; }
-        public int GameID { get; set; }
-        public string InputWord { get; set; }
     }
 }
