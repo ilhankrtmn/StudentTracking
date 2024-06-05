@@ -4,6 +4,7 @@ using MimeKit.Text;
 using MimeKit;
 using MailKit.Net.Smtp;
 using StudentTracking.Business.Configuraions;
+using StudentTracking.Core;
 
 namespace StudentTracking.Business.Services
 {
@@ -28,9 +29,9 @@ namespace StudentTracking.Business.Services
 			using var smtp = new SmtpClient();
 			smtp.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.Port, SecureSocketOptions.StartTls);
 			smtp.Authenticate(_emailConfiguration.UserName, _emailConfiguration.Password);
-			smtp.Send(email);
-			smtp.Disconnect(true);
-		}
+            smtp.Send(email);
+            smtp.Disconnect(true);
+        }
 
 	}
 }

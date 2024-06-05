@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentTracking.App.Models;
 using StudentTracking.Business.Interfaces;
+using StudentTracking.Core.Session;
+using StudentTracking.Data.Models;
 
 namespace StudentTracking.App.Controllers
 {
@@ -17,7 +19,7 @@ namespace StudentTracking.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            //CustomerRegisterBody customerRegisterBody = new CustomerRegisterBody();
+            //UserRegisterBody customerRegisterBody = new UserRegisterBody();
 
             //customerRegisterBody.CityList = await _registerService.GetCitiesAsync();
             //return View(customerRegisterBody);
@@ -26,7 +28,7 @@ namespace StudentTracking.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(CustomerRegisterBody customerRegisterBody)
+        public async Task<IActionResult> Register(UserRegisterBody customerRegisterBody)
         {
             //Customer customer = new Customer();
             //customer.Name = customerRegisterBody.Name;
@@ -73,19 +75,76 @@ namespace StudentTracking.App.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(CustomerLoginBody customerLoginBody)
+        public async Task<IActionResult> Login(UserLoginBody userLoginBody)
+        {
+            var Id = await _authenticationService.CheckCustomerLogin(userLoginBody.Email, userLoginBody.Password);
+            if (Id != 0)
+            {
+                var user = await _authenticationService.GetUser(Id);
+                SessionContext.SetInt("UserId", Id);
+                SessionContext.SetInt("UserTypeId", user.UserTypeId);
+                return RedirectToAction("Register", "Authentication");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SendOtp()
         {
             return View();
-            //var customerID = await _registerService.CheckCustomerLogin(customerLoginBody.Email, customerLoginBody.Password);
-            //if (customerID != 0)
-            //{
-            //    HttpContext.Session.SetString("customerID", customerID.ToString());
-            //    return RedirectToAction("GameList", "Customer");
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Login", "Customer");
-            //}
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendOtp(SendOtpRequestDto requestDto)
+        {
+            var response = await _authenticationService.SendOtp(requestDto);
+            SessionContext.SetString("email", requestDto.Email);
+
+            return (response == true) ? RedirectToAction("CheckOtp", "Authentication") : RedirectToAction("SendOtp", "Authentication");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckOtp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckOtp(CheckOtpRequestDto requestDto)
+        {
+            requestDto.Email = SessionContext.GetString("email");
+            var response = await _authenticationService.CheckOtp(requestDto);
+            var user = await _authenticationService.GetUser(requestDto.Email);
+            SessionContext.SetInt("userId", user.Id);
+
+            return (response == true) ? RedirectToAction("ResetPassword", "Authentication") : RedirectToAction("CheckOtp", "Authentication");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequestDto requestDto)
+        {
+            requestDto.UserId = SessionContext.GetInt("userId");
+
+            var response = await _authenticationService.ResetPassword(requestDto);
+            // TODO Burada istediğim sayfa yönlendirme işlemini yapmıyor. View tarafından kaynaklı duruyor. Kontrol et.
+            return (response == true) ? RedirectToAction("Login", "Authentication") : RedirectToAction("Login", "Authentication");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            SessionContext.Remove("UserId");
+            SessionContext.Remove("UserTypeId");
+            return RedirectToAction("Login", "Authentication");
         }
     }
 }

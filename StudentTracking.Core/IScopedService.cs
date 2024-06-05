@@ -1,4 +1,4 @@
-﻿namespace StudentTracking.Business
+﻿namespace StudentTracking.Core
 {
     public interface IScopedService
     {
