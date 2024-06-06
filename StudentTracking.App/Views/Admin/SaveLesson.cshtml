@@ -1,0 +1,44 @@
+﻿@model LessonforPage;
+@using System;
+@using System.Linq;
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "SaveLesson";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>Lesson</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">Ders</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+                @using (Html.BeginForm("SaveLesson", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    @Html.HiddenFor(model => model.Lesson.Id)
+                    @Html.HiddenFor(model => model.Lesson.CreatedDate)
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Ders Hocası</label>
+                            @Html.DropDownListFor(model => model.Lesson.UserId, new SelectList(Model.TeacherList, "Text", "Value", 0), "Öğretmen seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Ders Adı</label>
+                            @Html.EditorFor(model => model.Lesson.Name, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="exampleInputPassword1 mb-2">Durum</label>
+                            @Html.CheckBoxFor(model => model.Lesson.Status, new { @class = "to-labelauty", name = "Status", data_plugin = "labelauty", data_labelauty = "No|Yes" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit mb-4">İşlemi Kaydet</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>

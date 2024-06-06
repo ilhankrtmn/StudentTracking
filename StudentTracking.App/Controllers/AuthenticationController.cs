@@ -83,7 +83,19 @@ namespace StudentTracking.App.Controllers
                 var user = await _authenticationService.GetUser(Id);
                 SessionContext.SetInt("UserId", Id);
                 SessionContext.SetInt("UserTypeId", user.UserTypeId);
-                return RedirectToAction("Register", "Authentication");
+                switch (user.UserTypeId)
+                {
+                    case 1:
+                        return RedirectToAction("UserList", "Admin");
+                    case 2:
+                        return RedirectToAction("UserList", "Admin");
+                    case 3:
+                        return RedirectToAction("UserList", "Admin");
+                    case 4:
+                        return RedirectToAction("UserList", "Admin");
+                    default:
+                        return RedirectToAction("Login", "Authentication");
+                }
             }
             else
             {

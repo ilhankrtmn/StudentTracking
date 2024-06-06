@@ -1,0 +1,68 @@
+﻿@model UserforPage;
+@using System;
+@using System.Linq;
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "SaveUser";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>User</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">User</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+                @using (Html.BeginForm("SaveUser", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    @Html.HiddenFor(model => model.User.Id)
+                    @Html.HiddenFor(model => model.User.CreatedDate)
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">User Type</label>
+                            @Html.DropDownListFor(model => model.User.UserTypeId, (SelectList)ViewBag.SearchList, new { @class = "form-control", required = "required", autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">İsim</label>
+                            @Html.EditorFor(model => model.User.Name, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Soy İsim</label>
+                            @Html.EditorFor(model => model.User.Surname, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="exampleInputPassword1 mb-2">E-Posta Adresi</label>
+                            @Html.EditorFor(model => model.User.Email, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "email" } })
+                            @if (@ViewBag.ValidateControl != null)
+                            {
+                                <span class="panel-desc" style="font-weight: bold; color: red;">
+                                    @ViewBag.ValidateControl
+                                </span>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Şifre</label>
+                            @Html.EditorFor(model => model.User.Password, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="exampleInputPassword1 mb-2">Durum</label>
+                            @Html.CheckBoxFor(model => model.User.Status, new { @class = "to-labelauty", name = "Status", data_plugin = "labelauty", data_labelauty = "No|Yes" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit mb-4">İşlemi Kaydet</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,161 @@
+﻿@using System;
+@using StudentTracking.Data.Models.PageModel
+@model UserforListPage;
+
+@{
+    ViewData["Title"] = "UserList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+
+<title>Admin Panel-User List</title>
+<body>
+
+    <div class="page">
+        <div class="page-header">
+            <h1 class="page-title">User Listesi</h1>
+            <p class="page-description"></p>
+            <div class="page-header-actions">
+                <a class="btn btn-sm btn-inverse btn-round" href="/Admin/SaveUser/"
+                   target="_blank">
+                    <i class="icon wb-link" aria-hidden="true"></i>
+                    <span class="btn btn-primary submit mb-4">User Oluştur</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        User Listesi
+                        <span class="panel-desc">
+                        </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                           data-paging="true" data-filtering="true" data-sorting="true">
+                        <thead>
+                            <tr>
+                                <th data-name="Title" data-type="number" data-breakpoints="xs">User Id</th>
+                                <th data-name="Title">İsim</th>
+                                <th data-name="Title">Soy İsim</th>
+                                <th data-name="Title">Email</th>
+                                <th data-name="Title">User Type</th>
+                                <th data-name="CreatedDate">Oluşturulma Tarihi</th>
+                                <th data-name="status" data-filterable="true">Durum</th>
+                                <th data-name="button">User Güncelleme</th>
+                                <th data-name="button">User Silme</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Users)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Surname</td>
+                                    <td>@item.Email</td>
+                                    <td>
+                                        @if (item.UserTypeId == 2)
+                                        {
+                                            <span>Öğretmen</span>
+                                        }
+                                        else if (item.UserTypeId == 3)
+                                        {
+                                            <span>Veli</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Öğrenci</span>
+                                        }
+                                    </td>
+                                    <td>@item.CreatedDate.ToString("MMMM-dd-yyyy HH:mm")</td>
+                                    <td>
+                                        @if (item.Status == true)
+                                        {
+                                            <span class="badge badge-table badge-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-table badge-danger">Pasif</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "SaveUser", "Admin", new { userId = item.Id }, new { @class = "btn btn-primary" })
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" type="button" data-toggle="modal" data-entryid="@item.Id" onclick='confirmDelete(this)'>
+                                            <span class="text-uppercase hidden-md-down">Delete</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/Content/AdminPanel_Layout/classic/global/vendor/moment/moment.min.js"></script>
+    <script src="/Content/AdminPanel_Layout/classic/global/vendor/footable/footable.min.js"></script>
+    <script src="/Content/AdminPanel_Layout/classic/topbar/assets/examples/js/tables/footable.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(button) {
+            var entryID = $(button).data("entryid");
+
+            Swal.fire({
+                title: "Silmek istediğine emin misin?",
+                text: "Bunu geri alamazsınız!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Evet, silin!",
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/Admin/DeleteUser",
+                        method: "POST",
+                        data: { userId: entryID },
+                        success: function (response) {
+                            if (response == true) {
+                                Swal.fire({
+                                    title: "Silindi!",
+                                    text: "Kullanıcı silindi.",
+                                    icon: "success"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire({
+                                    title: "Hata!",
+                                    text: "Kullanıcı silinemedi!",
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "Hata!",
+                                text: "Beklenmedik bir hata oluştu!",
+                                icon: "error"
+                            });
+                        }
+                    });
+
+                }
+            });
+        }
+    </script>
+
+</body>
+

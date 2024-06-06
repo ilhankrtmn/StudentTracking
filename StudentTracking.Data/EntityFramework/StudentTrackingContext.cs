@@ -17,8 +17,10 @@ namespace StudentTracking.Data.EntityFramework
         public DbSet<Cities> Cities { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserType> UserTypes { get; set; }
-        public virtual DbSet<OutgoingMail> OutgoingMails { get; set; }
-        public virtual DbSet<UserEmailOtp> UserEmailOtps { get; set; }
+        public DbSet<OutgoingMail> OutgoingMails { get; set; }
+        public DbSet<UserEmailOtp> UserEmailOtps { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +44,10 @@ namespace StudentTracking.Data.EntityFramework
             modelBuilder.Entity<UserEmailOtp>().HasKey(p => p.Id);
             modelBuilder.Entity<UserEmailOtp>().Property(p => p.Status).HasDefaultValue(0);
             modelBuilder.Entity<UserEmailOtp>().Property(p => p.CreatedDate).HasDefaultValue(DateTime.Now);
+
+            modelBuilder.Entity<Lesson>().HasKey(p => p.Id);
+            modelBuilder.Entity<Lesson>().Property(p => p.Status).HasDefaultValue(0);
+            modelBuilder.Entity<Lesson>().Property(p => p.CreatedDate).HasDefaultValue(DateTime.Now);
         }
     }
 }
