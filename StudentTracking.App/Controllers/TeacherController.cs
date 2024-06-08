@@ -39,7 +39,6 @@ namespace StudentTracking.App.Controllers
         public async Task<IActionResult> SaveGrade(int lessonId)
         {
             GradeforListPage gradeforListPage = new GradeforListPage();
-            //TODO: Ekranlar kısmına öğrenci numarasını da ekle
 
             gradeforListPage.Grades = await _gradeService.GetGradeListAsync(new GetGradeListRequestDto
             {
@@ -68,7 +67,6 @@ namespace StudentTracking.App.Controllers
         public async Task<IActionResult> SaveAbsence(int lessonId)
         {
             AbsenceforListPage absenceforListPage = new AbsenceforListPage();
-            //TODO: Ekranlar kısmına öğrenci numarasını da ekle
             absenceforListPage.Absences = await _absenceService.GetAbsenceListAsync(new GetAbsenceListRequestDto
             {
                 LessonId = lessonId,

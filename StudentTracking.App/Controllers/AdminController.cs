@@ -41,6 +41,7 @@ namespace StudentTracking.App.Controllers
                  new UserforPage { UserTypeId = 3, UserTypeName = "Veli" },
                  new UserforPage { UserTypeId = 4, UserTypeName = "Öğrenci" }
                 };
+            userforPage.StudenList = await _userService.GetStudentDataListAsync(UserTypes.Student);
 
             ViewBag.SearchList = new SelectList(SearchList, "UserTypeId", "UserTypeName");
 
@@ -57,6 +58,8 @@ namespace StudentTracking.App.Controllers
                  new UserforPage { UserTypeId = 3, UserTypeName = "Veli" },
                  new UserforPage { UserTypeId = 4, UserTypeName = "Öğrenci" }
                 };
+
+            userforPage.StudenList = await _userService.GetStudentDataListAsync(UserTypes.Student);
 
             ViewBag.SearchList = new SelectList(SearchList, "UserTypeId", "UserTypeName");
 
@@ -108,6 +111,24 @@ namespace StudentTracking.App.Controllers
         public async Task<bool> DeleteLesson(int lessonId)
         {
             return await _lessonService.DeleteLesson(lessonId);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SaveStudenttoLesson(int lessonId)
+        {
+            StudenttoLessonforListPage studenttoLessonforListPage = new StudenttoLessonforListPage();
+
+            studenttoLessonforListPage.StudenttoLessons = await _userService.GetStudentListAsync(lessonId);
+            studenttoLessonforListPage.LessonId = lessonId;
+            return View(studenttoLessonforListPage);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveStudenttoLesson(StudenttoLessonforListPage studenttoLessonforListPage)
+        {
+            await _userService.SaveStudenttoLessonAsync(studenttoLessonforListPage);
+
+            return RedirectToAction("LessonList", "Admin");
         }
     }
 }

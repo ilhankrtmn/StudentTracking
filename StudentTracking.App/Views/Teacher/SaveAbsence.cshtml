@@ -24,7 +24,7 @@
                                 <th>Ders Adı</th>
                                 <th>Öğrenci Ad</th>
                                 <th>Öğrenci Soyad</th>
-                                @* TODO: Öğrenci numarasını ekle*@
+                                <th>Öğrenci Numarası</th>
                                 <th>Devamsızlık Sayısı</th>
                             </tr>
                         </thead>
@@ -40,6 +40,7 @@
                                     <td>@item.Lesson.Name</td>
                                     <td>@item.User.Name</td>
                                     <td>@item.User.Surname</td>
+                                    <td>@item.User.StudentNumber</td>
                                     <td>
                                         @Html.EditorFor(m => m.Absences[i].Count, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "1", min = "0", max = "20" } })
                                     </td>

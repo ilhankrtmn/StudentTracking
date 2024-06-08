@@ -21,7 +21,7 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">User Type</label>
-                            @Html.DropDownListFor(model => model.User.UserTypeId, (SelectList)ViewBag.SearchList, new { @class = "form-control", required = "required", autocomplete = "off" })
+                            @Html.DropDownListFor(model => model.User.UserTypeId, (SelectList)ViewBag.SearchList, "Kullanıcı tipini seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "UserType", onchange = "getDDValue();" })
                         </div>
                     </div>
                     <div class="form-row">
@@ -34,6 +34,18 @@
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">Soy İsim</label>
                             @Html.EditorFor(model => model.User.Surname, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-row" id="ChildrenPart">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Çocuk Listesi</label>
+                            @Html.DropDownListFor(model => model.User.ChildrenId, new SelectList(Model.StudenList, "Text", "Value", 0), "Çocuk seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "Children" })
+                        </div>
+                    </div>
+                    <div class="form-row" id="StudentNumberPart">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Öğrenci Numarası</label>
+                            @Html.EditorFor(model => model.User.StudentNumber, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", id = "studentNumber" } })
                         </div>
                     </div>
                     <div class="form-row">
@@ -66,3 +78,31 @@
         </div>
     </div>
 </section>
+
+<script>
+
+    function getDDValue() {
+        var e = document.getElementById("UserType");
+        var result = e.options[e.selectedIndex].value;
+        console.log(result);
+        if (result == 2) {
+            document.getElementById("StudentNumberPart").style.display = "none";
+            document.getElementById("studentNumber").required = false;
+            document.getElementById("ChildrenPart").style.display = "none";
+            document.getElementById("Children").required = false;
+        }
+        if (result == 3) {
+            document.getElementById("StudentNumberPart").style.display = "none";
+            document.getElementById("studentNumber").required = false;
+            document.getElementById("ChildrenPart").style.display = "block";
+            document.getElementById("Children").required = true;
+        }
+
+        if (result == 4) {
+            document.getElementById("StudentNumberPart").style.display = "block";
+            document.getElementById("studentNumber").required = true;
+            document.getElementById("ChildrenPart").style.display = "none";
+            document.getElementById("Children").required = false;
+        }
+    }
+</script>
