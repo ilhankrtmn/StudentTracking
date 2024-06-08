@@ -1,0 +1,51 @@
+﻿@model MailListforListPage;
+@using System;
+@using System.Linq;
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "MailList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>GuardianMailList</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">Gelen Mail Listesi</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+
+                <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                       data-paging="true" data-filtering="true" data-sorting="true">
+                    <thead>
+                        <tr>
+                            <th data-name="Title" data-type="number" data-breakpoints="xs">Mail Id</th>
+                            <th>Hoca Ad</th>
+                            <th>Hoca Soyad</th>
+                            <th>Konu</th>
+                            <th>Tarih</th>
+                            <th>Detayları Gör</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.MailLists)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.TeacherName</td>
+                                <td>@item.TeacherSurname</td>
+                                <td>@item.Subject</td>
+                                <td>@item.CreatedDate.ToString("MMMM-dd-yyyy HH:mm")</td>
+                                <td>
+                                    @Html.ActionLink("Detayları Görüntüle", "MailDetail", "Guardian", new { mailId = item.Id }, new { @class = "btn btn-info" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</section>

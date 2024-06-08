@@ -1,6 +1,7 @@
 ﻿using StudentTracking.Data.EntityFramework.Base;
 using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.Models;
+using StudentTracking.Data.Models.PageModel;
 
 namespace StudentTracking.Data.EntityFramework.Repositories.Interfaces
 {
@@ -10,5 +11,6 @@ namespace StudentTracking.Data.EntityFramework.Repositories.Interfaces
         Task<bool> SendOtpMailAsync(MailContactRequestDto requestDto);
         Task<int> CheckUserEmailIdAsync(int userId, int pincode);
         Task UpdateUserEmailOtpAsync(int emailId);
+        Task<MailListforListPage> GetGuardianMailListAsync(int guardianId);
     }
 }

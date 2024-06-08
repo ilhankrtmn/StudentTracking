@@ -40,7 +40,7 @@ namespace StudentTracking.App.Controllers
                     case 2:
                         return RedirectToAction("LessonList", "Admin");
                     case 3:
-                        return RedirectToAction("UserList", "Admin");
+                        return RedirectToAction("MailList", "Guardian");
                     case 4:
                         return RedirectToAction("StudentLessonList", "Student");
                     default:

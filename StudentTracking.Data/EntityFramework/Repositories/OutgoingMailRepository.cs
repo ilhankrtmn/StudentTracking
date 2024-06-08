@@ -4,6 +4,7 @@ using StudentTracking.Data.EntityFramework.Base;
 using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
 using StudentTracking.Data.Models;
+using StudentTracking.Data.Models.PageModel;
 
 namespace StudentTracking.Data.EntityFramework.Repositories
 {
@@ -70,8 +71,25 @@ namespace StudentTracking.Data.EntityFramework.Repositories
             userEmailOtp.UpdatedDate = DateTime.Now;
             _context.UserEmailOtps.Update(userEmailOtp);
 
-
             _context.SaveChanges();
+        }
+
+        public async Task<MailListforListPage> GetGuardianMailListAsync(int guardianId)
+        {
+            var data = await _context.OutgoingMails.Where(p => p.RecipientUserId == guardianId)
+                .Select(p => new MailList
+                {
+                    Id = p.Id,
+                    TeacherName = p.User.Name,
+                    TeacherSurname = p.User.Surname,
+                    Subject = p.Subject,
+                    CreatedDate = p.CreatedDate
+                }).ToListAsync();
+
+            return new MailListforListPage
+            {
+                MailLists = data
+            };
         }
     }
 }

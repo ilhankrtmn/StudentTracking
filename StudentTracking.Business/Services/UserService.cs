@@ -109,5 +109,15 @@ namespace StudentTracking.Business.Services
         {
             return await _userRepository.GetStudentLessonListAsync(userId);
         }
+
+        public async Task<MailListforListPage> GetGuardianMailListAsync(int guardianId)
+        {
+            return await _outgoingMailRepository.GetGuardianMailListAsync(guardianId);
+        }
+
+        public async Task<OutgoingMail> GetGuardianMailDetailAsync(int guardianId, int mailId)
+        {
+            return await _outgoingMailRepository.FindAsync(p => p.RecipientUserId == guardianId && p.Id == mailId);
+        }
     }
 }
