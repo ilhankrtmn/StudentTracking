@@ -84,11 +84,11 @@
                                         }
                                     </td>
                                     <td>
-                                        @Html.ActionLink("Edit", "SaveUser", "Admin", new { userId = item.Id }, new { @class = "btn btn-primary" })
+                                        @Html.ActionLink("Düzenle", "SaveUser", "Admin", new { userId = item.Id }, new { @class = "btn btn-warning" })
                                     </td>
                                     <td>
                                         <button class="btn btn-danger" type="button" data-toggle="modal" data-entryid="@item.Id" onclick='confirmDelete(this)'>
-                                            <span class="text-uppercase hidden-md-down">Delete</span>
+                                            <span class="hidden-md-down">Sil</span>
                                         </button>
                                     </td>
                                 </tr>

@@ -109,5 +109,23 @@ namespace StudentTracking.App.Controllers
         {
             return await _lessonService.DeleteLesson(lessonId);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SaveStudenttoLesson(int lessonId)
+        {
+            StudenttoLessonforListPage studenttoLessonforListPage = new StudenttoLessonforListPage();
+
+            studenttoLessonforListPage.StudenttoLessons = await _userService.GetStudentListAsync(lessonId);
+            studenttoLessonforListPage.LessonId = lessonId;
+            return View(studenttoLessonforListPage);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveStudenttoLesson(StudenttoLessonforListPage studenttoLessonforListPage)
+        {
+            await _userService.SaveStudenttoLessonAsync(studenttoLessonforListPage);
+
+            return RedirectToAction("LessonList", "Admin");
+        }
     }
 }

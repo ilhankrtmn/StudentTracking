@@ -37,8 +37,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
-                           data-paging="true" data-filtering="true" data-sorting="true">
+                    <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering" data-paging="true" data-filtering="true" data-sorting="true">
                         <thead>
                             <tr>
                                 <th data-name="Title" data-type="number" data-breakpoints="xs">Ders Id</th>
@@ -48,6 +47,7 @@
                                 @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
                                 {
                                     <th data-name="button">Ders Güncelleme</th>
+                                    <th data-name="button">Ders Öğrenci Ekle</th>
                                     <th data-name="button">Ders Silme</th>
                                 }
                                 else
@@ -78,11 +78,14 @@
                                     @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
                                     {
                                         <td>
-                                            @Html.ActionLink("Edit", "SaveLesson", "Admin", new { lessonId = item.Id }, new { @class = "btn btn-primary" })
+                                            @Html.ActionLink("Düzenle", "SaveLesson", "Admin", new { lessonId = item.Id }, new { @class = "btn btn-warning" })
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Derse Öğrenci Ekle", "SaveStudenttoLesson", "Admin", new { lessonId = item.Id }, new { @class = "btn btn-success" })
                                         </td>
                                         <td>
                                             <button class="btn btn-danger" type="button" data-toggle="modal" data-entryid="@item.Id" onclick='confirmDelete(this)'>
-                                                <span class="text-uppercase hidden-md-down">Delete</span>
+                                                <span class="hidden-md-down">Sil</span>
                                             </button>
                                         </td>
                                     }
