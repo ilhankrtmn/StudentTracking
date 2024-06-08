@@ -64,8 +64,16 @@ namespace StudentTracking.App.Controllers
             ViewBag.SearchList = new SelectList(SearchList, "UserTypeId", "UserTypeName");
 
             await _adminService.SaveorUpdateUser(userforPage.User);
-
-            return RedirectToAction("UserList", "Admin");
+            switch (SessionContext.GetInt("UserTypeId"))
+            {
+                case (int)UserTypes.Admin:
+                    return RedirectToAction("UserList", "Admin");
+                case (int)UserTypes.Teacher:
+                case (int)UserTypes.Student:
+                    return RedirectToAction("SaveUser", "Admin", new { userId = SessionContext.GetInt("UserId") });
+                default:
+                    return RedirectToAction("UserList", "Admin");
+            }
         }
 
         [HttpPost]

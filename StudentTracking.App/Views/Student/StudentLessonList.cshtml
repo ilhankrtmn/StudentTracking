@@ -1,0 +1,51 @@
+﻿@model StudentLessonListforListPage;
+@using System;
+@using System.Linq;
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "StudentLessonList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>StudentLessonList</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">Ders Bilgisi</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+
+                <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                       data-paging="true" data-filtering="true" data-sorting="true">
+                    <thead>
+                        <tr>
+                            <th data-name="Title" data-type="number" data-breakpoints="xs">Ders Id</th>
+                            <th>Ders Adı</th>
+                            <th>Hoca Ad</th>
+                            <th>Hoca Soyad</th>
+                            <th>Vize Notu</th>
+                            <th>Final Notu</th>
+                            <th>Devamsızlık Sayısı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.MergedDataList)
+                        {
+                            <tr>
+                                <td>@item.LessonId</td>
+                                <td>@item.LessonName</td>
+                                <td>@item.TeacherName</td>
+                                <td>@item.TeacherSurname</td>
+                                <td>@item.MidtermGrade</td>
+                                <td>@item.FinalGrade</td>
+                                <td>@item.AbsenceCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</section>

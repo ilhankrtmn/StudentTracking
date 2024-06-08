@@ -33,5 +33,50 @@ namespace StudentTracking.Data.EntityFramework.Repositories
                         })
                         .ToListAsync();
         }
+
+        public async Task<StudentLessonListforListPage> GetStudentLessonListAsync(int userId)
+        {
+            var absences = await _context.Absences
+                        .Include(p => p.Lesson)
+                        .Include(p => p.User)
+                        .Where(p => p.StudentId == userId)
+                        .ToListAsync();
+
+            var grades = await _context.Grades
+                        .Include(p => p.Lesson)
+                        .Include(p => p.User)
+                        .Where(p => p.StudentId == userId)
+                        .ToListAsync();
+
+            var teacherIds = grades.Select(g => g.Lesson.TeacherId)
+                           .Union(absences.Select(a => a.Lesson.TeacherId))
+                           .Distinct()
+                           .ToList();
+
+            var teachers = await _context.Users
+                    .Where(u => teacherIds.Contains(u.Id))
+                    .ToDictionaryAsync(t => t.Id, t => t);
+
+            
+            var mergedDataList = grades.GroupJoin(
+            absences,
+            grade => grade.LessonId,
+            absence => absence.LessonId,
+            (grade, absenceGroup) => new MergedData
+            {
+                LessonId = grade.LessonId,
+                LessonName = grade.Lesson.Name,
+                TeacherName = teachers.ContainsKey(grade.Lesson.TeacherId) ? teachers[grade.Lesson.TeacherId].Name : "Unknown",
+                TeacherSurname = teachers.ContainsKey(grade.Lesson.TeacherId) ? teachers[grade.Lesson.TeacherId].Surname : "Unknown",
+                MidtermGrade = grade.MidtermGrade,
+                FinalGrade = grade.FinalGrade,
+                AbsenceCount = absenceGroup.Sum(a => a.Count)
+            }).ToList();
+
+            return new StudentLessonListforListPage
+            {
+                MergedDataList = mergedDataList
+            };
+        }
     }
 }
