@@ -11,7 +11,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        // TODO: öğrenci Numarası ekle
+        public int StudentNumber { get; set; }
         public bool Status { get; set; }
     }
 }

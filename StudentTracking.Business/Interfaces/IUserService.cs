@@ -13,5 +13,6 @@ namespace StudentTracking.Business.Interfaces
         Task<OutgoingMail> GetTeacherMailDetailAsync(int userId, int mailId);
         Task<List<StudenttoLesson>> GetStudentListAsync(int lessonId);
         Task SaveStudenttoLessonAsync(StudenttoLessonforListPage requestDto);
+        Task<List<SelectListItem>> GetStudentDataListAsync(UserTypes userTypes);
     }
 }

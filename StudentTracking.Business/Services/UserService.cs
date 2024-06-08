@@ -89,5 +89,20 @@ namespace StudentTracking.Business.Services
 
             await _unitOfWork.CompleteAsync();
         }
+
+        public async Task<List<SelectListItem>> GetStudentDataListAsync(UserTypes userTypes)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            var studentIds = (await _userRepository.FindListAsync(p => p.UserTypeId == (int)userTypes)).Select(p => p.Id).ToList();
+            var data = await _userRepository.FindListAsync(p => studentIds.Contains(p.Id) && p.ChildrenId == null);
+
+            foreach (var item in data)
+            {
+                items.Add(new SelectListItem { Text = item.Id.ToString(), Value = item.Name });
+            }
+
+            return items;
+        }
     }
 }

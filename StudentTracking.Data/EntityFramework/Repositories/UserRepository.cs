@@ -28,6 +28,7 @@ namespace StudentTracking.Data.EntityFramework.Repositories
                             Id = p.Id,
                             Name = p.Name,
                             Surname = p.Surname,
+                            StudentNumber = p.StudentNumber.Value,
                             Status = false
                         })
                         .ToListAsync();

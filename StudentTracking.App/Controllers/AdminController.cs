@@ -41,6 +41,7 @@ namespace StudentTracking.App.Controllers
                  new UserforPage { UserTypeId = 3, UserTypeName = "Veli" },
                  new UserforPage { UserTypeId = 4, UserTypeName = "Öğrenci" }
                 };
+            userforPage.StudenList = await _userService.GetStudentDataListAsync(UserTypes.Student);
 
             ViewBag.SearchList = new SelectList(SearchList, "UserTypeId", "UserTypeName");
 
@@ -57,6 +58,8 @@ namespace StudentTracking.App.Controllers
                  new UserforPage { UserTypeId = 3, UserTypeName = "Veli" },
                  new UserforPage { UserTypeId = 4, UserTypeName = "Öğrenci" }
                 };
+
+            userforPage.StudenList = await _userService.GetStudentDataListAsync(UserTypes.Student);
 
             ViewBag.SearchList = new SelectList(SearchList, "UserTypeId", "UserTypeName");
 

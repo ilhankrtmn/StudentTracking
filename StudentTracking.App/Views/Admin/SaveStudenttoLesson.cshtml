@@ -22,7 +22,7 @@
                             <tr>
                                 <th>Öğrenci Ad</th>
                                 <th>Öğrenci Soyad</th>
-                                @* TODO: Öğrenci numarasını ekle*@
+                                <th>Öğrenci Numarası</th>
                                 <th>Derse Ekleme</th>
                             </tr>
                         </thead>
@@ -34,6 +34,7 @@
                                     @Html.HiddenFor(m => m.StudenttoLessons[i].Id)
                                     <td>@item.Name</td>
                                     <td>@item.Surname</td>
+                                    <td>@item.StudentNumber</td>
                                     <td>
                                         @Html.CheckBoxFor(m => m.StudenttoLessons[i].Status, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
                                     </td>
