@@ -1,6 +1,8 @@
 ﻿@model UserforPage;
 @using System;
 @using System.Linq;
+@using StudentTracking.Core.Session
+@using StudentTracking.Data.Enums
 @using StudentTracking.Data.Models.PageModel
 
 @{
@@ -21,7 +23,15 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">User Type</label>
-                            @Html.DropDownListFor(model => model.User.UserTypeId, (SelectList)ViewBag.SearchList, "Kullanıcı tipini seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "UserType", onchange = "getDDValue();" })
+                            @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+                            {
+                                @Html.DropDownListFor(model => model.User.UserTypeId, (SelectList)ViewBag.SearchList, "Kullanıcı tipini seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "UserType", onchange = "getDDValue();" })
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.User.UserTypeId)
+                                @Html.DropDownListFor(model => model.User.UserTypeId, (SelectList)ViewBag.SearchList, "Kullanıcı tipini seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "UserType", onchange = "getDDValue();", @disabled = "disabled" })
+                            }
                         </div>
                     </div>
                     <div class="form-row">
@@ -45,18 +55,28 @@
                     <div class="form-row" id="StudentNumberPart">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">Öğrenci Numarası</label>
-                            @Html.EditorFor(model => model.User.StudentNumber, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", id = "studentNumber" } })
+                            @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+                            {
+                                @Html.EditorFor(model => model.User.StudentNumber, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", id = "studentNumber" } })
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.User.StudentNumber)
+                                @Html.EditorFor(model => model.User.StudentNumber, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", id = "studentNumber", @disabled = "disabled" } })
+                            }
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="exampleInputPassword1 mb-2">E-Posta Adresi</label>
-                            @Html.EditorFor(model => model.User.Email, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "email" } })
-                            @if (@ViewBag.ValidateControl != null)
+                            @if (SessionContext.GetInt("UserTypeId") != (int)UserTypes.Student)
                             {
-                                <span class="panel-desc" style="font-weight: bold; color: red;">
-                                    @ViewBag.ValidateControl
-                                </span>
+                                @Html.EditorFor(model => model.User.Email, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "email" } })
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.User.Email)
+                                @Html.EditorFor(model => model.User.Email, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "email", @disabled = "disabled" } })
                             }
                         </div>
                     </div>
@@ -69,7 +89,15 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="exampleInputPassword1 mb-2">Durum</label>
-                            @Html.CheckBoxFor(model => model.User.Status, new { @class = "to-labelauty", name = "Status", data_plugin = "labelauty", data_labelauty = "No|Yes" })
+                            @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+                            {
+                                @Html.CheckBoxFor(model => model.User.Status, new { @class = "to-labelauty", name = "Status", data_plugin = "labelauty", data_labelauty = "No|Yes" })
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.User.Status)
+                                @Html.CheckBoxFor(model => model.User.Status, new { @class = "to-labelauty", name = "Status", data_plugin = "labelauty", data_labelauty = "No|Yes", @disabled = "disabled" })
+                            }
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary submit mb-4">İşlemi Kaydet</button>
@@ -80,11 +108,13 @@
 </section>
 
 <script>
+    window.onload = function () {
+        getDDValue();
+    };
 
     function getDDValue() {
         var e = document.getElementById("UserType");
         var result = e.options[e.selectedIndex].value;
-        console.log(result);
         if (result == 2) {
             document.getElementById("StudentNumberPart").style.display = "none";
             document.getElementById("studentNumber").required = false;
