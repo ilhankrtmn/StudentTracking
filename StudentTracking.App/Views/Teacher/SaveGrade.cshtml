@@ -1,0 +1,59 @@
+﻿@model GradeforListPage;
+@using System;
+@using System.Linq;
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "SaveGrade";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>Lesson</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">Ders</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+                @using (Html.BeginForm("SaveGrade", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                           data-paging="true" data-filtering="true" data-sorting="true">
+                        <thead>
+                            <tr>
+                                <th data-name="Title" data-type="number" data-breakpoints="xs">Not Id</th>
+                                <th>Ders Adı</th>
+                                <th>Öğrenci Ad</th>
+                                <th>Öğrenci Soyad</th>
+                                @* TODO: Öğrenci numarasını ekle*@
+                                <th>Vize Notu</th>
+                                <th>Final Notu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Grades.Count; i++)
+                            {
+                                var item = Model.Grades[i];
+                                <tr>
+                                    @Html.HiddenFor(m => m.Grades[i].Id)
+                                    @Html.HiddenFor(m => m.Grades[i].StudentId)
+                                    @Html.HiddenFor(m => m.Grades[i].LessonId)
+                                    <td>@item.Id</td>
+                                    <td>@item.Lesson.Name</td>
+                                    <td>@item.User.Name</td>
+                                    <td>@item.User.Surname</td>
+                                    <td>
+                                        @Html.EditorFor(m => m.Grades[i].MidtermGrade, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "0.50", min = "0", max = "100" } })
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(m => m.Grades[i].FinalGrade, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "0.50", min = "0", max = "100" } })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary submit mb-4">İşlemi Kaydet</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>

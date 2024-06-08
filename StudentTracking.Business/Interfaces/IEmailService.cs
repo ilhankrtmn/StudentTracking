@@ -1,7 +1,10 @@
-﻿namespace StudentTracking.Business.Interfaces
+﻿using StudentTracking.Data.Models;
+
+namespace StudentTracking.Business.Interfaces
 {
-	public interface IEmailService
-	{
-		void SendMail(string mailTo, string subject, string body, string from = null);
-	}
+    public interface IEmailService
+    {
+        void SendMail(SendMailRequestDto requestDto);
+        Task MailContact(MailContactRequestDto requestDto);
+    }
 }

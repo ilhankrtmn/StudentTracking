@@ -1,4 +1,6 @@
 ﻿@using System;
+@using StudentTracking.Core.Session
+@using StudentTracking.Data.Enums
 @using StudentTracking.Data.Models.PageModel
 @model LessonforListPage;
 
@@ -11,18 +13,20 @@
 <body>
 
     <div class="page">
-        <div class="page-header">
-            <h1 class="page-title">Ders Listesi</h1>
-            <p class="page-description"></p>
-            <div class="page-header-actions">
-                <a class="btn btn-sm btn-inverse btn-round" href="/Admin/SaveLesson/"
-                   target="_blank">
-                    <i class="icon wb-link" aria-hidden="true"></i>
-                    <span class="btn btn-primary submit mb-4">Ders Oluştur</span>
-                </a>
+        @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+        {
+            <div class="page-header">
+                <h1 class="page-title">Ders Listesi</h1>
+                <p class="page-description"></p>
+                <div class="page-header-actions">
+                    <a class="btn btn-sm btn-inverse btn-round" href="/Admin/SaveLesson/"
+                       target="_blank">
+                        <i class="icon wb-link" aria-hidden="true"></i>
+                        <span class="btn btn-primary submit mb-4">Ders Oluştur</span>
+                    </a>
+                </div>
             </div>
-        </div>
-
+        }
         <div class="page-content">
             <div class="panel">
                 <div class="panel-heading">
@@ -41,8 +45,17 @@
                                 <th data-name="Title">Ders Adı</th>
                                 <th data-name="CreatedDate">Oluşturulma Tarihi</th>
                                 <th data-name="status" data-filterable="true">Durum</th>
-                                <th data-name="button">Ders Güncelleme</th>
-                                <th data-name="button">Ders Silme</th>
+                                @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+                                {
+                                    <th data-name="button">Ders Güncelleme</th>
+                                    <th data-name="button">Ders Silme</th>
+                                }
+                                else
+                                {
+                                    <th data-name="button">Detayları Gör</th>
+                                    <th data-name="button">Not Gir</th>
+                                    <th data-name="button">Devamsızlık Gir</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -62,14 +75,29 @@
                                             <span class="badge badge-table badge-danger">Pasif</span>
                                         }
                                     </td>
-                                    <td>
-                                        @Html.ActionLink("Edit", "SaveLesson", "Admin", new { lessonId = item.Id }, new { @class = "btn btn-primary" })
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger" type="button" data-toggle="modal" data-entryid="@item.Id" onclick='confirmDelete(this)'>
-                                            <span class="text-uppercase hidden-md-down">Delete</span>
-                                        </button>
-                                    </td>
+                                    @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Edit", "SaveLesson", "Admin", new { lessonId = item.Id }, new { @class = "btn btn-primary" })
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger" type="button" data-toggle="modal" data-entryid="@item.Id" onclick='confirmDelete(this)'>
+                                                <span class="text-uppercase hidden-md-down">Delete</span>
+                                            </button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Detayları Görüntüle", "LessonDetail", "Teacher", new { lessonId = item.Id }, new { @class = "btn btn-info" })
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Not Gir", "SaveGrade", "Teacher", new { lessonId = item.Id }, new { @class = "btn btn-primary" })
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Devamsızlık Gir", "SaveAbsence", "Teacher", new { lessonId = item.Id }, new { @class = "btn btn-primary" })
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>

@@ -1,0 +1,73 @@
+﻿@using System;
+@using StudentTracking.Core.Session
+@using StudentTracking.Data.Enums
+@using StudentTracking.Data.Models.PageModel
+@model MailContactforListPage;
+
+@{
+    ViewData["Title"] = "MailContactList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>Teacher Panel-Mail Listesi</title>
+<body>
+
+    <div class="page">
+        <div class="page-header">
+            <h1 class="page-title">Ders Listesi</h1>
+            <p class="page-description"></p>
+            <div class="page-header-actions">
+                <a class="btn btn-sm btn-inverse btn-round" href="/Teacher/MailContact/"
+                   target="_blank">
+                    <i class="icon wb-link" aria-hidden="true"></i>
+                    <span class="btn btn-primary submit mb-4">Mail Oluştur</span>
+                </a>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Mail Listesi
+                        <span class="panel-desc">
+                        </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                           data-paging="true" data-filtering="true" data-sorting="true">
+                        <thead>
+                            <tr>
+                                <th data-name="Title" data-type="number" data-breakpoints="xs">Mail Id</th>
+                                <th>Gönderilen Veli Bilgisi</th>
+                                <th>Konu Başlığı</th>
+                                <th>Gönderilme Tarihi</th>
+                                <th>Mail Detayları</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OutgoingMail)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Subject</td>
+                                    <td>@item.CreatedDate.ToString("MMMM-dd-yyyy HH:mm")</td>
+                                    <td>
+                                        @Html.ActionLink("Detayları Gör", "MailContact", "Teacher", new { mailId = item.Id }, new { @class = "btn btn-primary" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/Content/AdminPanel_Layout/classic/global/vendor/moment/moment.min.js"></script>
+    <script src="/Content/AdminPanel_Layout/classic/global/vendor/footable/footable.min.js"></script>
+    <script src="/Content/AdminPanel_Layout/classic/topbar/assets/examples/js/tables/footable.js"></script>
+
+</body>

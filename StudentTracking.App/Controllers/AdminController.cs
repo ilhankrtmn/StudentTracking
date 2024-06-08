@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StudentTracking.Business.Interfaces;
 using StudentTracking.Core.Session;
+using StudentTracking.Data.Enums;
 using StudentTracking.Data.Models;
 using StudentTracking.Data.Models.PageModel;
 
@@ -11,11 +12,13 @@ namespace StudentTracking.App.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly ILessonService _lessonService;
+        private readonly IUserService _userService;
 
-        public AdminController(IAdminService adminService, ILessonService lessonService)
+        public AdminController(IAdminService adminService, ILessonService lessonService, IUserService userService)
         {
             _adminService = adminService;
             _lessonService = lessonService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -88,7 +91,7 @@ namespace StudentTracking.App.Controllers
             LessonforPage lessonforPage = new LessonforPage();
 
             lessonforPage.Lesson = await _lessonService.GetLessonAsync(lessonId);
-            lessonforPage.TeacherList = await _lessonService.GetTeacherListAsync();
+            lessonforPage.TeacherList = await _userService.GetUserDataListAsync(UserTypes.Teacher);
             return View(lessonforPage);
         }
 
@@ -96,7 +99,7 @@ namespace StudentTracking.App.Controllers
         public async Task<IActionResult> SaveLesson(LessonforPage lessonforPage)
         {
             await _lessonService.SaveorUpdateLesson(lessonforPage.Lesson);
-            lessonforPage.TeacherList = await _lessonService.GetTeacherListAsync();
+            lessonforPage.TeacherList = await _userService.GetUserDataListAsync(UserTypes.Teacher);
 
             return RedirectToAction("LessonList", "Admin");
         }
