@@ -10,5 +10,6 @@
         public string Message { get; set; }
         public int Status { get; set; }
         public DateTime CreatedDate { get; set; }
+        public User User { get; set; }
     }
 }

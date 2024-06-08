@@ -42,6 +42,7 @@ namespace StudentTracking.Data.EntityFramework
             modelBuilder.Entity<OutgoingMail>().Property(p => p.SendUserId).HasDefaultValue(0);
             modelBuilder.Entity<OutgoingMail>().Property(p => p.RecipientUserId).HasDefaultValue(0);
             modelBuilder.Entity<OutgoingMail>().Property(p => p.CreatedDate).HasDefaultValue(DateTime.Now);
+            modelBuilder.Entity<OutgoingMail>().HasOne(p => p.User).WithMany().HasForeignKey(p => p.SendUserId);
 
             modelBuilder.Entity<UserEmailOtp>().HasKey(p => p.Id);
             modelBuilder.Entity<UserEmailOtp>().Property(p => p.Status).HasDefaultValue(0);
@@ -54,11 +55,11 @@ namespace StudentTracking.Data.EntityFramework
             modelBuilder.Entity<Grade>().HasKey(p => p.Id);
             modelBuilder.Entity<Grade>().Property(p => p.MidtermGrade).HasDefaultValue(0);
             modelBuilder.Entity<Grade>().Property(p => p.FinalGrade).HasDefaultValue(0);
-            modelBuilder.Entity<Grade>().HasOne(g => g.User).WithMany().HasForeignKey(g => g.StudentId);
+            modelBuilder.Entity<Grade>().HasOne(p => p.User).WithMany().HasForeignKey(p => p.StudentId);
 
             modelBuilder.Entity<Absence>().HasKey(p => p.Id);
             modelBuilder.Entity<Absence>().Property(p => p.Count).HasDefaultValue(0);
-            modelBuilder.Entity<Absence>().HasOne(g => g.User).WithMany().HasForeignKey(g => g.StudentId);
+            modelBuilder.Entity<Absence>().HasOne(p => p.User).WithMany().HasForeignKey(p => p.StudentId);
         }
     }
 }
