@@ -7,5 +7,6 @@ namespace StudentTracking.Data.EntityFramework.Repositories.Interfaces
     public interface IUserRepository : IRepositoryBase<User>
     {
         Task<List<StudenttoLesson>> GetStudentList(int lessonId);
+        Task<StudentLessonListforListPage> GetStudentLessonListAsync(int userId);
     }
 }

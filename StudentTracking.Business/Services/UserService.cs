@@ -104,5 +104,10 @@ namespace StudentTracking.Business.Services
 
             return items;
         }
+
+        public async Task<StudentLessonListforListPage> GetStudentLessonListAsync(int userId)
+        {
+            return await _userRepository.GetStudentLessonListAsync(userId);
+        }
     }
 }

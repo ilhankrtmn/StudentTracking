@@ -17,56 +17,6 @@ namespace StudentTracking.App.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register()
-        {
-            //UserRegisterBody customerRegisterBody = new UserRegisterBody();
-
-            //customerRegisterBody.CityList = await _registerService.GetCitiesAsync();
-            //return View(customerRegisterBody);
-            return View();
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(UserRegisterBody customerRegisterBody)
-        {
-            //Customer customer = new Customer();
-            //customer.Name = customerRegisterBody.Name;
-            //customer.Surname = customerRegisterBody.Surname;
-            //customer.Email = customerRegisterBody.Email;
-            //customer.CityID = customerRegisterBody.CityID;
-            //customer.Password = customerRegisterBody.Password;
-
-            //customerRegisterBody.CityList = await _registerService.GetCitiesAsync();
-
-            //RegisterValidator registerValidator = new RegisterValidator();
-            //ValidationResult validationResult = registerValidator.Validate(customer);
-
-            //if (validationResult.IsValid)
-            //{
-            //    if (await _registerService.CheckRegisterMail(customerRegisterBody.Email))
-            //    {
-            //        await _registerService.InsertCustomer(customer);
-            //        return RedirectToAction("GameList", "Customer");
-            //    }
-            //    else
-            //    {
-            //        //TODO else bloğuna düşerse yönlendirme alanını değiştir.
-            //        return RedirectToAction("Login", "Customer");
-            //    }
-            //}
-            //else
-            //{
-            //    foreach (var item in validationResult.Errors)
-            //    {
-            //        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-            //    }
-            //}
-            //return View(customerRegisterBody);
-            return View();
-        }
-
-        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login()
         {
@@ -92,7 +42,7 @@ namespace StudentTracking.App.Controllers
                     case 3:
                         return RedirectToAction("UserList", "Admin");
                     case 4:
-                        return RedirectToAction("UserList", "Admin");
+                        return RedirectToAction("StudentLessonList", "Student");
                     default:
                         return RedirectToAction("Login", "Authentication");
                 }
@@ -147,7 +97,7 @@ namespace StudentTracking.App.Controllers
             requestDto.UserId = SessionContext.GetInt("userId");
 
             var response = await _authenticationService.ResetPassword(requestDto);
-            // TODO Burada istediğim sayfa yönlendirme işlemini yapmıyor. View tarafından kaynaklı duruyor. Kontrol et.
+
             return (response == true) ? RedirectToAction("Login", "Authentication") : RedirectToAction("ResetPassword", "Authentication");
         }
 
