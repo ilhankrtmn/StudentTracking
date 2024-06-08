@@ -3,6 +3,7 @@ using StudentTracking.Core;
 using StudentTracking.Data.EntityFramework.Base;
 using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
+using StudentTracking.Data.Models;
 
 namespace StudentTracking.Data.EntityFramework.Repositories
 {
@@ -20,14 +21,14 @@ namespace StudentTracking.Data.EntityFramework.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task SendOtpMailAsync(int userId = 0, string email = "", string message = "")
+        public async Task<bool> SendOtpMailAsync(MailContactRequestDto requestDto)
         {
             var dateThreshold = DateTime.Now.AddMinutes(-60);
 
             var outgoingId = await _context.OutgoingMails
-                .Where(p => p.UserId == userId
-                    && p.Email == email
-                    && p.Message == message
+                .Where(p => p.RecipientUserId == requestDto.RecipientUserId
+                    && p.Email == requestDto.Email
+                    && p.Message == requestDto.Message
                     && p.CreatedDate >= dateThreshold)
                 .Select(p => (long?)p.Id)
                 .SingleOrDefaultAsync();
@@ -38,11 +39,18 @@ namespace StudentTracking.Data.EntityFramework.Repositories
             {
                 await _context.OutgoingMails.AddAsync(new OutgoingMail
                 {
-                    UserId = userId,
-                    Email = email,
-                    Message = message,
+                    SendUserId = requestDto.SendUserId,
+                    RecipientUserId = requestDto.RecipientUserId,
+                    Email = requestDto.Email,
+                    Subject = requestDto.Subject,
+                    Message = requestDto.Message,
                     Status = 0
                 });
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

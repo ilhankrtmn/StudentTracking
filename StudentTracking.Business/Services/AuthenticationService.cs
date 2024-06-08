@@ -47,8 +47,20 @@ namespace StudentTracking.Business.Services
             await _outgoingMailRepository.InsertUserEmailOtpAsync(user.Id, pincode);
             message = message.Replace("#Pincode#", $"{pincode}");
 
-            _emailService.SendMail(requestDto.Email, "Şifre Değiştirme Doğrulaması", message);
-            await _outgoingMailRepository.SendOtpMailAsync(user.Id, requestDto.Email, message);
+            _emailService.SendMail(new SendMailRequestDto
+            {
+                MailTo = requestDto.Email,
+                Subject = "Şifre Değiştirme Doğrulaması",
+                Body = message
+            });
+            await _outgoingMailRepository.SendOtpMailAsync(new MailContactRequestDto
+            {
+                SendUserId = 0,
+                RecipientUserId = user.Id,
+                Email = requestDto.Email,
+                Subject = "Şifre Değiştirme Doğrulaması",
+                Message = message
+            });
             await _unitOfWork.CompleteAsync();
 
             return true;
@@ -66,7 +78,6 @@ namespace StudentTracking.Business.Services
             if (entryID > 0)
             {
                 await _outgoingMailRepository.UpdateUserEmailOtpAsync(Convert.ToInt32(entryID));
-                //TODO Burada OutgoingMails tablosu da update edilebilir.
                 return true;
             }
 

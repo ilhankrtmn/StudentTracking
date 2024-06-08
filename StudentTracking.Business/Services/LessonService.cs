@@ -3,9 +3,7 @@ using StudentTracking.Core;
 using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
 using StudentTracking.Data.EntityFramework.UnitOfWork;
-using StudentTracking.Data.Enums;
 using StudentTracking.Data.Models;
-using System.Web.Mvc;
 
 namespace StudentTracking.Business.Services
 {
@@ -30,7 +28,7 @@ namespace StudentTracking.Business.Services
             }
             else
             {
-                return (await _lessonRepository.FindListAsync(p => p.UserId == requestDto.UserId && p.Status == true)).OrderByDescending(p => p.CreatedDate).ToList();
+                return (await _lessonRepository.FindListAsync(p => p.TeacherId == requestDto.UserId && p.Status == true)).OrderByDescending(p => p.CreatedDate).ToList();
             }
         }
 
@@ -55,20 +53,6 @@ namespace StudentTracking.Business.Services
                 return true;
             }
             return false;
-        }
-
-        public async Task<List<SelectListItem>> GetTeacherListAsync()
-        {
-            List<SelectListItem> items = new List<SelectListItem>();
-
-            var data = await _userRepository.FindListAsync(p => p.UserTypeId == (int)UserTypes.Teacher);
-
-            foreach (var item in data)
-            {
-                items.Add(new SelectListItem { Text = item.Id.ToString(), Value = item.Name });
-            }
-
-            return items;
         }
     }
 }

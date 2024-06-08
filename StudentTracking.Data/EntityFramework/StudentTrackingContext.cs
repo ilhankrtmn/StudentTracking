@@ -20,6 +20,8 @@ namespace StudentTracking.Data.EntityFramework
         public DbSet<OutgoingMail> OutgoingMails { get; set; }
         public DbSet<UserEmailOtp> UserEmailOtps { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Grade> Grades { get; set; }
+        public DbSet<Absence> Absences { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,8 +39,8 @@ namespace StudentTracking.Data.EntityFramework
             modelBuilder.Entity<UserType>().HasKey(p => p.Id);
 
             modelBuilder.Entity<OutgoingMail>().HasKey(p => p.Id);
-            modelBuilder.Entity<OutgoingMail>().Property(p => p.UserId).HasDefaultValue(0);
-            modelBuilder.Entity<OutgoingMail>().Property(p => p.Status).HasDefaultValue(0);
+            modelBuilder.Entity<OutgoingMail>().Property(p => p.SendUserId).HasDefaultValue(0);
+            modelBuilder.Entity<OutgoingMail>().Property(p => p.RecipientUserId).HasDefaultValue(0);
             modelBuilder.Entity<OutgoingMail>().Property(p => p.CreatedDate).HasDefaultValue(DateTime.Now);
 
             modelBuilder.Entity<UserEmailOtp>().HasKey(p => p.Id);
@@ -46,8 +48,17 @@ namespace StudentTracking.Data.EntityFramework
             modelBuilder.Entity<UserEmailOtp>().Property(p => p.CreatedDate).HasDefaultValue(DateTime.Now);
 
             modelBuilder.Entity<Lesson>().HasKey(p => p.Id);
-            modelBuilder.Entity<Lesson>().Property(p => p.Status).HasDefaultValue(0);
             modelBuilder.Entity<Lesson>().Property(p => p.CreatedDate).HasDefaultValue(DateTime.Now);
+            modelBuilder.Entity<Lesson>().Property(p => p.Status).HasDefaultValue(0);
+
+            modelBuilder.Entity<Grade>().HasKey(p => p.Id);
+            modelBuilder.Entity<Grade>().Property(p => p.MidtermGrade).HasDefaultValue(0);
+            modelBuilder.Entity<Grade>().Property(p => p.FinalGrade).HasDefaultValue(0);
+            modelBuilder.Entity<Grade>().HasOne(g => g.User).WithMany().HasForeignKey(g => g.StudentId);
+
+            modelBuilder.Entity<Absence>().HasKey(p => p.Id);
+            modelBuilder.Entity<Absence>().Property(p => p.Count).HasDefaultValue(0);
+            modelBuilder.Entity<Absence>().HasOne(g => g.User).WithMany().HasForeignKey(g => g.StudentId);
         }
     }
 }

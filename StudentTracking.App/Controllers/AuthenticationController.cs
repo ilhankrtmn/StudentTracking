@@ -88,7 +88,7 @@ namespace StudentTracking.App.Controllers
                     case 1:
                         return RedirectToAction("UserList", "Admin");
                     case 2:
-                        return RedirectToAction("UserList", "Admin");
+                        return RedirectToAction("LessonList", "Admin");
                     case 3:
                         return RedirectToAction("UserList", "Admin");
                     case 4:
@@ -148,7 +148,7 @@ namespace StudentTracking.App.Controllers
 
             var response = await _authenticationService.ResetPassword(requestDto);
             // TODO Burada istediğim sayfa yönlendirme işlemini yapmıyor. View tarafından kaynaklı duruyor. Kontrol et.
-            return (response == true) ? RedirectToAction("Login", "Authentication") : RedirectToAction("Login", "Authentication");
+            return (response == true) ? RedirectToAction("Login", "Authentication") : RedirectToAction("ResetPassword", "Authentication");
         }
 
         [HttpGet]

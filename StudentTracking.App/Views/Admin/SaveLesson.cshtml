@@ -21,7 +21,7 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">Ders Hocası</label>
-                            @Html.DropDownListFor(model => model.Lesson.UserId, new SelectList(Model.TeacherList, "Text", "Value", 0), "Öğretmen seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
+                            @Html.DropDownListFor(model => model.Lesson.TeacherId, new SelectList(Model.TeacherList, "Text", "Value", 0), "Öğretmen seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
                         </div>
                     </div>
                     <div class="form-row">

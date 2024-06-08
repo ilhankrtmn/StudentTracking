@@ -1,0 +1,55 @@
+﻿@model AbsenceforListPage;
+@using System;
+@using System.Linq;
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "SaveAbsence";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>Lesson</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">Devamsızlık</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+                @using (Html.BeginForm("SaveAbsence", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                           data-paging="true" data-filtering="true" data-sorting="true">
+                        <thead>
+                            <tr>
+                                <th data-name="Title" data-type="number" data-breakpoints="xs">Devamsızlık Id</th>
+                                <th>Ders Adı</th>
+                                <th>Öğrenci Ad</th>
+                                <th>Öğrenci Soyad</th>
+                                @* TODO: Öğrenci numarasını ekle*@
+                                <th>Devamsızlık Sayısı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Absences.Count; i++)
+                            {
+                                var item = Model.Absences[i];
+                                <tr>
+                                    @Html.HiddenFor(m => m.Absences[i].Id)
+                                    @Html.HiddenFor(m => m.Absences[i].StudentId)
+                                    @Html.HiddenFor(m => m.Absences[i].LessonId)
+                                    <td>@item.Id</td>
+                                    <td>@item.Lesson.Name</td>
+                                    <td>@item.User.Name</td>
+                                    <td>@item.User.Surname</td>
+                                    <td>
+                                        @Html.EditorFor(m => m.Absences[i].Count, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "1", min = "0", max = "20" } })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary submit mb-4">İşlemi Kaydet</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>
