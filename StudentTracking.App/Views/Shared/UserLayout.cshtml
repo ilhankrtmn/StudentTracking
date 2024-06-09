@@ -49,7 +49,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     }
                     else
                     {
-                        <div class="navbar-brand"><i class="fab fa-linode"></i> Student Tracking</div>
+                        @if (SessionContext.GetInt("UserTypeId") == 1)
+                        {
+                            <a class="navbar-brand" href="@Url.Action("UserList","Admin")">
+                                <i class="fab fa-linode"></i> Student Tracking
+                            </a>
+                        }
+                        else if (SessionContext.GetInt("UserTypeId") == 2)
+                        {
+                            <a class="navbar-brand" href="@Url.Action("LessonList","Admin")">
+                                <i class="fab fa-linode"></i> Student Tracking
+                            </a>
+                        }
+                        else if (SessionContext.GetInt("UserTypeId") == 3)
+                        {
+                            <a class="navbar-brand" href="@Url.Action("MailList","Guardian")">
+                                <i class="fab fa-linode"></i> Student Tracking
+                            </a>
+                        }
+                        else if (SessionContext.GetInt("UserTypeId") == 4)
+                        {
+                            <a class="navbar-brand" href="@Url.Action("StudentLessonList","Student")">
+                                <i class="fab fa-linode"></i> Student Tracking
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="navbar-brand" href="@Url.Action("Login","Authentication")">
+                                <i class="fab fa-linode"></i> Student Tracking
+                            </a>
+                        }
                     }
 
                 </div>
