@@ -8,5 +8,6 @@ namespace StudentTracking.Data.EntityFramework.Repositories.Interfaces
     {
         Task<List<Grade>> GetGradesAsync(GetGradeListRequestDto requestDto);
         Task<List<Grade>> GetAllGradesAsync();
+        Task<List<Grade>> GetGradesTeacherAsync(int teacherId);
     }
 }

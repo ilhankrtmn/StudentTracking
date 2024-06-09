@@ -54,7 +54,7 @@
                                     <td>@item.Subject</td>
                                     <td>@item.CreatedDate.ToString("MMMM-dd-yyyy HH:mm")</td>
                                     <td>
-                                        @Html.ActionLink("Detayları Gör", "MailContact", "Teacher", new { mailId = item.Id }, new { @class = "btn btn-primary" })
+                                        @Html.ActionLink("Detayları Gör", "MailContact", "Teacher", new { mailId = item.Id, status = true }, new { @class = "btn btn-primary" })
                                     </td>
                                 </tr>
                             }

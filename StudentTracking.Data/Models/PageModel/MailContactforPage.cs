@@ -7,5 +7,6 @@ namespace StudentTracking.Data.Models.PageModel
     {
         public OutgoingMail OutgoingMail { get; set; }
         public List<SelectListItem> GuardianList { get; set; }
+        public bool Status { get; set; }
     }
 }

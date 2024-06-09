@@ -6,6 +6,7 @@ using StudentTracking.Data.EntityFramework.UnitOfWork;
 using StudentTracking.Core.Enums;
 using StudentTracking.Data.Models.PageModel;
 using System.Web.Mvc;
+using StudentTracking.Core.Session;
 
 namespace StudentTracking.Business.Services
 {
@@ -32,6 +33,22 @@ namespace StudentTracking.Business.Services
             List<SelectListItem> items = new List<SelectListItem>();
 
             var data = await _userRepository.FindListAsync(p => p.UserTypeId == (int)userTypes);
+
+            foreach (var item in data)
+            {
+                items.Add(new SelectListItem { Text = item.Id.ToString(), Value = item.Name });
+            }
+
+            return items;
+        }
+
+        public async Task<List<SelectListItem>> GetGuardianDataListAsync(UserTypes userTypes)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            var studentIds = (await _gradeRepository.GetGradesTeacherAsync(SessionContext.GetInt("UserId"))).Select(p => p.User.Id);
+
+            var data = await _userRepository.FindListAsync(p => p.UserTypeId == (int)userTypes && studentIds.Contains(p.ChildrenId ?? -1));
 
             foreach (var item in data)
             {
