@@ -34,7 +34,7 @@ namespace StudentTracking.App.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SaveUser(int userId)
+        public async Task<IActionResult> SaveUser(int userId, bool status)
         {
             UserforPage userforPage = new UserforPage();
             List<UserforPage> SearchList = new List<UserforPage>
@@ -43,9 +43,16 @@ namespace StudentTracking.App.Controllers
                  new UserforPage { UserTypeId = 3, UserTypeName = "Veli" },
                  new UserforPage { UserTypeId = 4, UserTypeName = "Öğrenci" }
                 };
-            userforPage.StudenList = await _userService.GetStudentDataListAsync(UserTypes.Student);
-
             ViewBag.SearchList = new SelectList(SearchList, "UserTypeId", "UserTypeName");
+
+            if (status)
+            {
+                userforPage.StudenList = await _userService.GetStudentDataListAsync(UserTypes.Student);
+            }
+            else
+            {
+                userforPage.StudenList = await _userService.GetStudentSaveDataListAsync(UserTypes.Student);
+            }
 
             userforPage.User = await _adminService.GetUserAsync(userId);
             return View(userforPage);

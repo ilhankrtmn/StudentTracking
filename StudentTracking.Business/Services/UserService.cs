@@ -122,6 +122,21 @@ namespace StudentTracking.Business.Services
             return items;
         }
 
+        public async Task<List<SelectListItem>> GetStudentSaveDataListAsync(UserTypes userTypes)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            var studentIds = (await _userRepository.FindListAsync(p => p.UserTypeId == (int)userTypes)).Select(p => p.Id).ToList();
+            var childrenstudentIds = (await _userRepository.FindListAsync(p => studentIds.Contains(p.ChildrenId.Value))).Select(p => p.ChildrenId).ToList();
+            var data = await _userRepository.FindListAsync(p => !childrenstudentIds.Contains(p.Id) && p.UserTypeId == 4);
+            foreach (var item in data)
+            {
+                items.Add(new SelectListItem { Text = item.Id.ToString(), Value = item.Name });
+            }
+
+            return items;
+        }
+
         public async Task<StudentLessonListforListPage> GetStudentLessonListAsync(int userId)
         {
             return await _userRepository.GetStudentLessonListAsync(userId);
