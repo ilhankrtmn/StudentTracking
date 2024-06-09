@@ -101,14 +101,12 @@ namespace StudentTracking.App.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MailContact(int mailId)
+        public async Task<IActionResult> MailContact(int mailId, bool status)
         {
-            //TODO: Burada mail detayına giderse içeriği değiştiremeyecek şekilde ayarlamalısın.
-
             MailContactforPage mailContactforPage = new MailContactforPage();
-            // TODO Burada sadece kendi dersini alan öğrencilerin velisini görmesi gerekmektedir.
-            // TODO Önce dersi seçtirip o dersin öğrencilerinin velisini görebilirse daha iyi olur.
-            mailContactforPage.GuardianList = await _userService.GetUserDataListAsync(UserTypes.Guardian);
+            mailContactforPage.Status = status;
+
+            mailContactforPage.GuardianList = await _userService.GetGuardianDataListAsync(UserTypes.Guardian);
             mailContactforPage.OutgoingMail = await _userService.GetTeacherMailDetailAsync(SessionContext.GetInt("UserId"), mailId);
 
             return View(mailContactforPage);
@@ -117,9 +115,7 @@ namespace StudentTracking.App.Controllers
         [HttpPost]
         public async Task<IActionResult> MailContact(MailContactforPage mailContactforPage)
         {
-            // TODO Burada sadece kendi dersini alan öğrencilerin velisini görmesi gerekmektedir.
-            // TODO Önce dersi seçtirip o dersin öğrencilerinin velisini görebilirse daha iyi olur.
-            mailContactforPage.GuardianList = await _userService.GetUserDataListAsync(UserTypes.Guardian);
+            mailContactforPage.GuardianList = await _userService.GetGuardianDataListAsync(UserTypes.Guardian);
 
             mailContactforPage.OutgoingMail.Email = await _userService.GetUserMailAsync(mailContactforPage.OutgoingMail.RecipientUserId);
 

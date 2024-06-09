@@ -35,5 +35,14 @@ namespace StudentTracking.Data.EntityFramework.Repositories
                         .Include(p => p.User)
                         .ToListAsync();
         }
+
+        public async Task<List<Grade>> GetGradesTeacherAsync(int teacherId)
+        {
+            return await _context.Grades
+                        .Include(p => p.Lesson)
+                        .Include(p => p.User)
+                        .Where(p => p.Lesson.TeacherId == teacherId)
+                        .ToListAsync();
+        }
     }
 }

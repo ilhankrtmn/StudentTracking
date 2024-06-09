@@ -21,35 +21,49 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">Gönderilecek Veli</label>
-                            @* @if (Model.OutgoingMail.Id > 0)
-                        {
-                        @Html.DropDownListFor(model => model.OutgoingMail.RecipientUserId, new SelectList(Model.GuardianList, "Text", "Value", 0), "Veli seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", @disabled = "disabled" })
-                        }
-                        else
-                        {
-                        @Html.DropDownListFor(model => model.OutgoingMail.RecipientUserId, new SelectList(Model.GuardianList, "Text", "Value", 0), "Veli seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
-                        } *@
-                            @Html.DropDownListFor(model => model.OutgoingMail.RecipientUserId, new SelectList(Model.GuardianList, "Text", "Value", 0), "Veli seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
+                            @if (Model.Status == false)
+                            {
+                                @Html.DropDownListFor(model => model.OutgoingMail.RecipientUserId, new SelectList(Model.GuardianList, "Text", "Value", 0), "Veli seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.OutgoingMail.RecipientUserId, new SelectList(Model.GuardianList, "Text", "Value", 0), "Veli seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", @disabled = "disabled" })
+                            }
+                            @* @Html.DropDownListFor(model => model.OutgoingMail.RecipientUserId, new SelectList(Model.GuardianList, "Text", "Value", 0), "Veli seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" }) *@
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">Konu</label>
-                            @* @if (Model.OutgoingMail.Id > 0)
-                        {
-                        @Html.EditorFor(model => model.OutgoingMail.Subject, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", @disabled = "disabled" } })
-                        }
-                        else
-                        {
-                        @Html.EditorFor(model => model.OutgoingMail.Subject, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
-                        } *@
-                            @Html.EditorFor(model => model.OutgoingMail.Subject, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                            @if (Model.Status == false)
+                            {
+                                @Html.EditorFor(model => model.OutgoingMail.Subject, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.OutgoingMail.Subject, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", @disabled = "disabled" } })
+                            }
+                            @* @Html.EditorFor(model => model.OutgoingMail.Subject, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off" } }) *@
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label for="validationCustom01">İçerik</label>
-                            @* @if (Model.OutgoingMail.Id > 0)
+                            @if (Model.Status == false)
+                            {
+                                @Html.TextAreaFor(model => model.OutgoingMail.Message, new
+                                    {
+                                        @class = "maxlength-textarea form-control",
+                                        @data_placement = "bottom-right-inside",
+                                        data_plugin = "maxlength",
+                                        maxlength = "1000",
+                                        rows = "5",
+                                        placeholder = "Max 1000 karakter.",
+                                        required = "required",
+                                        contenteditable = "true"
+                                    })
+                            }
+                            else
                             {
                                 @Html.TextAreaFor(model => model.OutgoingMail.Message, new
                                     {
@@ -64,31 +78,17 @@
                                         @disabled = "disabled"
                                     })
                             }
-                            else
-                            {
-                                @Html.TextAreaFor(model => model.OutgoingMail.Message, new
-                                    {
-                                        @class = "maxlength-textarea form-control",
-                                        @data_placement = "bottom-right-inside",
-                                        data_plugin = "maxlength",
-                                        maxlength = "1000",
-                                        rows = "5",
-                                        placeholder = "Max 1000 karakter.",
-                                        required = "required",
-                                        contenteditable = "true"
-                                    })
-                            } *@
-                            @Html.TextAreaFor(model => model.OutgoingMail.Message, new
-                                {
-                                    @class = "maxlength-textarea form-control",
-                                    @data_placement = "bottom-right-inside",
-                                    data_plugin = "maxlength",
-                                    maxlength = "1000",
-                                    rows = "5",
-                                    placeholder = "Max 1000 karakter.",
-                                    required = "required",
-                                    contenteditable = "true"
-                                })
+                            @*  @Html.TextAreaFor(model => model.OutgoingMail.Message, new
+                        {
+                        @class = "maxlength-textarea form-control",
+                        @data_placement = "bottom-right-inside",
+                        data_plugin = "maxlength",
+                        maxlength = "1000",
+                        rows = "5",
+                        placeholder = "Max 1000 karakter.",
+                        required = "required",
+                        contenteditable = "true"
+                        }) *@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary submit mb-4">Mail Gönder</button>
