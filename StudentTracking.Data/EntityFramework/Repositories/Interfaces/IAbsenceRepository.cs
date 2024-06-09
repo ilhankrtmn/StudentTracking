@@ -7,5 +7,6 @@ namespace StudentTracking.Data.EntityFramework.Repositories.Interfaces
     public interface IAbsenceRepository : IRepositoryBase<Absence>
     {
         Task<List<Absence>> GetAbsenceAsync(GetAbsenceListRequestDto requestDto);
+        Task<List<Absence>> GetAllAbsenceAsync();
     }
 }

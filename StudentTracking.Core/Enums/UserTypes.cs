@@ -1,4 +1,4 @@
-﻿namespace StudentTracking.Data.Enums
+﻿namespace StudentTracking.Core.Enums
 {
     public enum UserTypes
     {

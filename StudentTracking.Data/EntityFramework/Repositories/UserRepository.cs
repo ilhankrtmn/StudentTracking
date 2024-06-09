@@ -3,7 +3,7 @@ using StudentTracking.Core;
 using StudentTracking.Data.EntityFramework.Base;
 using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
-using StudentTracking.Data.Enums;
+using StudentTracking.Core.Enums;
 using StudentTracking.Data.Models.PageModel;
 
 namespace StudentTracking.Data.EntityFramework.Repositories

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudentTracking.Business.Interfaces;
 using StudentTracking.Core.Session;
-using StudentTracking.Data.Enums;
+using StudentTracking.Core.Enums;
 using StudentTracking.Data.Models;
 using StudentTracking.Data.Models.PageModel;
 

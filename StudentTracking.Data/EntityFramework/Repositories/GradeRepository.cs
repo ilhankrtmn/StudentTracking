@@ -13,10 +13,26 @@ namespace StudentTracking.Data.EntityFramework.Repositories
 
         public async Task<List<Grade>> GetGradesAsync(GetGradeListRequestDto requestDto)
         {
-            return await _context.Grades
+            var grades = Queryable()
+                        .AsNoTracking()
                         .Include(p => p.Lesson)
                         .Include(p => p.User)
-                        .Where(p => p.Lesson.TeacherId == requestDto.UserId && p.LessonId == requestDto.LessonId)
+                        .Where(p => p.LessonId == requestDto.LessonId);
+
+            if (requestDto.UserId != null)
+            {
+                grades = grades.Where(p => p.Lesson.TeacherId == requestDto.UserId);
+            }
+
+            return await grades.ToListAsync();
+        }
+
+        public async Task<List<Grade>> GetAllGradesAsync()
+        {
+            return await Queryable()
+                        .AsNoTracking()
+                        .Include(p => p.Lesson)
+                        .Include(p => p.User)
                         .ToListAsync();
         }
     }

@@ -4,6 +4,7 @@ using StudentTracking.Data.EntityFramework.Entities;
 using StudentTracking.Data.EntityFramework.Repositories.Interfaces;
 using StudentTracking.Data.EntityFramework.UnitOfWork;
 using StudentTracking.Data.Models;
+using System.Web.Mvc;
 
 namespace StudentTracking.Business.Services
 {
@@ -11,13 +12,11 @@ namespace StudentTracking.Business.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILessonRepository _lessonRepository;
-        private readonly IUserRepository _userRepository;
 
-        public LessonService(IUnitOfWork unitOfWork, ILessonRepository lessonRepository, IUserRepository userRepository)
+        public LessonService(IUnitOfWork unitOfWork, ILessonRepository lessonRepository)
         {
             _unitOfWork = unitOfWork;
             _lessonRepository = lessonRepository;
-            _userRepository = userRepository;
         }
 
         public async Task<List<Lesson>> GetLessonListAsync(GetLessonListRequestDto requestDto)
@@ -53,6 +52,28 @@ namespace StudentTracking.Business.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<SelectListItem>> GetLessonDataSelectListAsync(GetLessonListRequestDto requestDto)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            List<Lesson> lessons = new List<Lesson>();
+
+            if (requestDto.UserTypeId == 1)
+            {
+                lessons = (await _lessonRepository.GetAllAsync()).OrderByDescending(p => p.CreatedDate).ToList();
+            }
+            else
+            {
+                lessons = (await _lessonRepository.FindListAsync(p => p.TeacherId == requestDto.UserId && p.Status == true)).OrderByDescending(p => p.CreatedDate).ToList();
+            }
+
+            foreach (var item in lessons)
+            {
+                items.Add(new SelectListItem { Text = item.Id.ToString(), Value = item.Name });
+            }
+
+            return items;
         }
     }
 }
