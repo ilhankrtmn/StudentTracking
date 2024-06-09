@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StudentTracking.Business.Interfaces;
 using StudentTracking.Core.Session;
-using StudentTracking.Data.Enums;
+using StudentTracking.Core.Enums;
 using StudentTracking.Data.Models;
 using StudentTracking.Data.Models.PageModel;
 
@@ -13,12 +13,14 @@ namespace StudentTracking.App.Controllers
         private readonly IAdminService _adminService;
         private readonly ILessonService _lessonService;
         private readonly IUserService _userService;
+        private readonly IReportService _reportService;
 
-        public AdminController(IAdminService adminService, ILessonService lessonService, IUserService userService)
+        public AdminController(IAdminService adminService, ILessonService lessonService, IUserService userService, IReportService reportService)
         {
             _adminService = adminService;
             _lessonService = lessonService;
             _userService = userService;
+            _reportService = reportService;
         }
 
         [HttpGet]
@@ -137,6 +139,85 @@ namespace StudentTracking.App.Controllers
             await _userService.SaveStudenttoLessonAsync(studenttoLessonforListPage);
 
             return RedirectToAction("LessonList", "Admin");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Report()
+        {
+            ReportforPage reportforPage = new ReportforPage();
+
+            #region DropDownPart
+            List<ReportforPage> reportTypeList = new List<ReportforPage>
+            {
+                new ReportforPage { ReportTypeId = 1, ReportTypeName = "Not" },
+                new ReportforPage { ReportTypeId = 2, ReportTypeName = "Devamsızlık" }
+            };
+            ViewBag.ReportTypeList = new SelectList(reportTypeList, "ReportTypeId", "ReportTypeName");
+
+            List<ReportforPage> situationTypeList = new List<ReportforPage>
+            {
+                new ReportforPage { SituationTypeId = 1, SituationTypeName = "Kalanlar" },
+                new ReportforPage { SituationTypeId = 2, SituationTypeName = "Geçenler" },
+                new ReportforPage { SituationTypeId = 3, SituationTypeName = "Özel Koşul" }
+            };
+            ViewBag.SituationTypeList = new SelectList(situationTypeList, "SituationTypeId", "SituationTypeName");
+
+            List<ReportforPage> statusTypeList = new List<ReportforPage>
+            {
+                new ReportforPage { StatusTypeId = 1, StatusTypeName = "Büyük" },
+                new ReportforPage { StatusTypeId = 2, StatusTypeName = "Küçük" }
+            };
+            ViewBag.StatusTypeList = new SelectList(statusTypeList, "StatusTypeId", "StatusTypeName");
+
+            reportforPage.LessonList = await _lessonService.GetLessonDataSelectListAsync(new GetLessonListRequestDto
+            {
+                UserId = SessionContext.GetInt("UserId"),
+                UserTypeId = SessionContext.GetInt("UserTypeId"),
+            });
+            #endregion
+
+            return View(reportforPage);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Report(ReportforPage reportforPage)
+        {
+            #region DropDownPart
+            List<ReportforPage> reportTypeList = new List<ReportforPage>
+            {
+                new ReportforPage { ReportTypeId = 1, ReportTypeName = "Not" },
+                new ReportforPage { ReportTypeId = 2, ReportTypeName = "Devamsızlık" }
+            };
+            ViewBag.ReportTypeList = new SelectList(reportTypeList, "ReportTypeId", "ReportTypeName");
+
+            List<ReportforPage> situationTypeList = new List<ReportforPage>
+            {
+                new ReportforPage { SituationTypeId = 1, SituationTypeName = "Kalanlar" },
+                new ReportforPage { SituationTypeId = 2, SituationTypeName = "Geçenler" },
+                new ReportforPage { SituationTypeId = 3, SituationTypeName = "Özel Koşul" }
+            };
+            ViewBag.SituationTypeList = new SelectList(situationTypeList, "SituationTypeId", "SituationTypeName");
+
+            List<ReportforPage> statusTypeList = new List<ReportforPage>
+            {
+                new ReportforPage { StatusTypeId = 1, StatusTypeName = "Büyük" },
+                new ReportforPage { StatusTypeId = 2, StatusTypeName = "Küçük" }
+            };
+            ViewBag.StatusTypeList = new SelectList(statusTypeList, "StatusTypeId", "StatusTypeName");
+
+            reportforPage.LessonList = await _lessonService.GetLessonDataSelectListAsync(new GetLessonListRequestDto
+            {
+                UserId = SessionContext.GetInt("UserId"),
+                UserTypeId = SessionContext.GetInt("UserTypeId"),
+            });
+            #endregion
+
+            reportforPage = await _reportService.ReportDataAsync(reportforPage);
+
+            ViewBag.GradesDisplayTable = reportforPage.Grades.Count > 0;
+            ViewBag.AbsencesDisplayTable = reportforPage.Absences.Count > 0;
+
+            return View(reportforPage);
         }
     }
 }

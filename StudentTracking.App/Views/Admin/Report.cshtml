@@ -1,0 +1,167 @@
+﻿@model ReportforPage;
+@using StudentTracking.Core.Session
+@using StudentTracking.Core.Enums
+@using StudentTracking.Data.Models.PageModel
+
+@{
+    ViewData["Title"] = "Report";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<title>Rapor</title>
+<section class="main-content-w3layouts-agileits center-form">
+    <div class="container form-container">
+        <h3 class="tittle text-center">Rapor</h3>
+        <div class="inner-sec">
+            <div class="section-header">
+                @using (Html.BeginForm("Report", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return Validate(this);", onkeydown = "return event.key != 'Enter';" }))
+                {
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Rapor Tipi</label>
+                            @Html.DropDownListFor(model => model.ReportTypeId, (SelectList)ViewBag.ReportTypeList, "Rapor tipini seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "ReportType", onchange = "updateVisibility();" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Ders Seçimi</label>
+                            @if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Admin)
+                            {
+                                @Html.DropDownListFor(model => model.LessonId, new SelectList(Model.LessonList, "Text", "Value", 0), "Ders seçiniz", new { @class = "form-control", autocomplete = "off" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.LessonId, new SelectList(Model.LessonList, "Text", "Value", 0), "Ders seçiniz", new { @class = "form-control", required = "required", autocomplete = "off" })
+                            }
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Durum Seçimi</label>
+                            @Html.DropDownListFor(model => model.SituationTypeId, (SelectList)ViewBag.SituationTypeList, "Durum seçiniz", new { @class = "form-control", required = "required", autocomplete = "off", id = "SituationType", onchange = "updateVisibility();" })
+                        </div>
+                    </div>
+                    <div class="form-row" id="InputPart">
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01" id="gradeLabel">Not Girin</label>
+                            <label for="validationCustom01" id="absenceLabel">Devamsızlık Sayısı Girin</label>
+                            @Html.EditorFor(model => model.SearchParameter, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="validationCustom01">Koşul Seçimi</label>
+                            @Html.DropDownListFor(model => model.StatusTypeId, (SelectList)ViewBag.StatusTypeList, "Durum seçiniz", new { @class = "form-control", autocomplete = "off" })
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary submit mb-4">Rapor Oluştur</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<div class="page-content" style="margin-top:-30px;">
+    <div class="panel">
+        <div class="panel-body">
+            @if (ViewBag.GradesDisplayTable == true)
+            {
+                <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                       data-paging="true" data-filtering="true" data-sorting="true">
+                    <thead>
+                        <tr>
+                            <th>Ders Adı</th>
+                            <th>Öğrenci Ad</th>
+                            <th>Öğrenci Soyad</th>
+                            <th>Öğrenci Numarası</th>
+                            <th>Vize Notu</th>
+                            <th>Final Notu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Grades.Count; i++)
+                        {
+                            var item = Model.Grades[i];
+                            <tr>
+                                <td>@item.Lesson.Name</td>
+                                <td>@item.User.Name</td>
+                                <td>@item.User.Surname</td>
+                                <td>@item.User.StudentNumber</td>
+                                <td>
+                                    @Html.EditorFor(m => m.Grades[i].MidtermGrade, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "1", min = "0", max = "100", @disabled = "disabled" } })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(m => m.Grades[i].FinalGrade, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "1", min = "0", max = "100", @disabled = "disabled" } })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (ViewBag.AbsencesDisplayTable == true)
+            {
+                <table class="table table-bordered table-hover toggle-circle" id="exampleFootableFiltering"
+                       data-paging="true" data-filtering="true" data-sorting="true">
+                    <thead>
+                        <tr>
+                            <th>Ders Adı</th>
+                            <th>Öğrenci Ad</th>
+                            <th>Öğrenci Soyad</th>
+                            <th>Öğrenci Numarası</th>
+                            <th>Devamsızlık Sayısı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Absences.Count; i++)
+                        {
+                            var item = Model.Absences[i];
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Lesson.Name</td>
+                                <td>@item.User.Name</td>
+                                <td>@item.User.Surname</td>
+                                <td>@item.User.StudentNumber</td>
+                                <td>
+                                    @Html.EditorFor(m => m.Absences[i].Count, new { htmlAttributes = new { @class = "form-control", required = "required", autocomplete = "off", type = "number", step = "1", min = "0", max = "20", @disabled = "disabled" } })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        updateVisibility();
+    };
+
+    function updateVisibility() {
+        var reportTypeElement = document.getElementById("ReportType");
+        var situationTypeElement = document.getElementById("SituationType");
+
+        var reportType = reportTypeElement ? reportTypeElement.value : null;
+        var situationType = situationTypeElement ? situationTypeElement.value : null;
+
+        var inputPart = document.getElementById("InputPart");
+        var gradeLabel = document.getElementById("gradeLabel");
+        var absenceLabel = document.getElementById("absenceLabel");
+
+        inputPart.style.display = "none";
+        gradeLabel.style.display = "none";
+        absenceLabel.style.display = "none";
+
+        if (reportType && situationType == 3) {
+            inputPart.style.display = "block";
+
+            if (reportType == 1) {
+                gradeLabel.style.display = "block";
+            } else if (reportType == 2) {
+                absenceLabel.style.display = "block";
+            }
+        }
+    }
+
+    document.getElementById("ReportType").addEventListener("change", updateVisibility);
+    document.getElementById("SituationType").addEventListener("change", updateVisibility);
+</script>

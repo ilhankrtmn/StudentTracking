@@ -1,5 +1,5 @@
 ﻿using StudentTracking.Data.EntityFramework.Entities;
-using StudentTracking.Data.Enums;
+using StudentTracking.Core.Enums;
 using StudentTracking.Data.Models.PageModel;
 using System.Web.Mvc;
 

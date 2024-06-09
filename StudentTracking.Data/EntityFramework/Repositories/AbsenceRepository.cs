@@ -13,10 +13,26 @@ namespace StudentTracking.Data.EntityFramework.Repositories
 
         public async Task<List<Absence>> GetAbsenceAsync(GetAbsenceListRequestDto requestDto)
         {
-            return await _context.Absences
+            var absences = Queryable()
+                        .AsNoTracking()
                         .Include(p => p.Lesson)
                         .Include(p => p.User)
-                        .Where(p => p.Lesson.TeacherId == requestDto.UserId && p.LessonId == requestDto.LessonId)
+                        .Where(p => p.LessonId == requestDto.LessonId);
+
+            if (requestDto.UserId != null)
+            {
+                absences = absences.Where(p => p.Lesson.TeacherId == requestDto.UserId);
+            }
+
+            return await absences.ToListAsync();
+        }
+
+        public async Task<List<Absence>> GetAllAbsenceAsync()
+        {
+            return await Queryable()
+                        .AsNoTracking()
+                        .Include(p => p.Lesson)
+                        .Include(p => p.User)
                         .ToListAsync();
         }
     }

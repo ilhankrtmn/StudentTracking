@@ -1,5 +1,5 @@
 ﻿@using StudentTracking.Core.Session
-@using StudentTracking.Data.Enums
+@using StudentTracking.Core.Enums
 <div class="header_top" id="home">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler navbar-toggler-right mx-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -25,6 +25,12 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Report","Admin")">
+                                Rapor Sayfası
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
                     }
                     else if (SessionContext.GetInt("UserTypeId") == (int)UserTypes.Teacher)
                     {
@@ -43,6 +49,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("SaveUser","Admin", new { userId = SessionContext.GetInt("UserId") })">
                                 Hesap Bilgileri
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Report","Admin")">
+                                Rapor Sayfası
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
